@@ -1,6 +1,3 @@
-import java.util.Collections;
-import java.util.Map;
-
 import javax.swing.JOptionPane;
 
 public class VendingMachineModel {
