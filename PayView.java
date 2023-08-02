@@ -88,6 +88,8 @@ public PayView(Customer customer, Currency currency, VendingMachine vendingMachi
                 }
             }
 
+            Transaction transaction = new Transaction(customer.getCart(), totalPrice, vendingMachine);
+        vendingMachine.addTransaction(transaction);
             JOptionPane.showMessageDialog(this, "Payment Successful! Change: $" + String.format("%.2f", excess));
             customer.clearCart();
             dispose();
