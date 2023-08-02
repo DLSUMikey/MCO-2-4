@@ -32,59 +32,80 @@ public class CurrencyView extends JFrame {
         updateTableData();
     }
 
-    private void initUI() {
-        setTitle("Currency View - " + vendingMachine.getName());
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(800, 600));  // Increased size of the frame
+    /**
+ * Initializes the user interface components for the currency view.
+ * This method sets up the window title, dimensions, and various UI elements
+ * such as table, buttons, and input fields required for managing the vending machine's currency.
+ * It also adds action listeners to the buttons to handle user interactions.
+ */
+private void initUI() {
+    setTitle("Currency View - " + vendingMachine.getName());
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setPreferredSize(new Dimension(800, 600)); // Increased size of the frame
 
-        String[] columnNames = {"Denomination", "Quantity"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        currencyTable = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane(currencyTable);
+    // Create the column names for the currency table
+    String[] columnNames = {"Denomination", "Quantity"};
+    DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+    currencyTable = new JTable(model);
+    JScrollPane scrollPane = new JScrollPane(currencyTable);
 
-        JButton addCurrencyButton = new JButton("Add Currency");
-        addCurrencyButton.addActionListener(new AddCurrencyBtnListener());
+    // Create and set up the "Add Currency" button to allow adding currency
+    JButton addCurrencyButton = new JButton("Add Currency");
+    addCurrencyButton.addActionListener(new AddCurrencyBtnListener());
 
-        JButton backButton = new JButton("Back");
-        backButton.addActionListener(new BackBtnListener());
+    // Create and set up the "Back" button to allow returning to the previous view
+    JButton backButton = new JButton("Back");
+    backButton.addActionListener(new BackBtnListener());
 
-        denominationField = new JTextField(15);
-        JLabel denominationLabel = new JLabel("Enter Denomination:");
+    // Create input fields and labels for denomination and quantity
+    denominationField = new JTextField(15);
+    JLabel denominationLabel = new JLabel("Enter Denomination:");
 
-        quantityField = new JTextField(5);
-        JLabel quantityLabel = new JLabel("Enter Quantity:");
+    quantityField = new JTextField(5);
+    JLabel quantityLabel = new JLabel("Enter Quantity:");
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(denominationLabel);
-        buttonPanel.add(denominationField);
-        buttonPanel.add(quantityLabel);
-        buttonPanel.add(quantityField);
-        buttonPanel.add(addCurrencyButton);
-        buttonPanel.add(backButton);
+    // Create a panel to hold the input fields and buttons
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.add(denominationLabel);
+    buttonPanel.add(denominationField);
+    buttonPanel.add(quantityLabel);
+    buttonPanel.add(quantityField);
+    buttonPanel.add(addCurrencyButton);
+    buttonPanel.add(backButton);
 
-        updateTableData();
+    // Update the table with the current currency data
+    updateTableData();
 
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
-        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    // Set up the main content pane and add UI components to it
+    getContentPane().setLayout(new BorderLayout());
+    getContentPane().add(scrollPane, BorderLayout.CENTER);
+    getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        pack();
-        setLocationRelativeTo(null);
+    pack(); // Pack the components to fit the preferred size
+    setLocationRelativeTo(null); // Center the window on the screen
+}
+
+/**
+ * Updates the data displayed in the currency table.
+ * This method retrieves the current currency data from the vending machine
+ * and populates the table with the denomination and corresponding quantity.
+ */
+private void updateTableData() {
+    DefaultTableModel model = (DefaultTableModel) currencyTable.getModel();
+    model.setRowCount(0); // Clear the existing table data
+
+    // Get the current currency data from the vending machine
+    Map<String, Integer> currency = vendingMachine.getCurrency().getDenominations();
+
+    // Add each denomination and its quantity as a new row in the table
+    for (Map.Entry<String, Integer> entry : currency.entrySet()) {
+        String denomination = entry.getKey();
+        Integer quantity = entry.getValue();
+        String[] rowData = {denomination, quantity.toString()};
+        model.addRow(rowData);
     }
+}
 
-    private void updateTableData() {
-        DefaultTableModel model = (DefaultTableModel) currencyTable.getModel();
-        model.setRowCount(0);
-
-        Map<String, Integer> currency = vendingMachine.getCurrency().getDenominations();
-
-        for (Map.Entry<String, Integer> entry : currency.entrySet()) {
-            String denomination = entry.getKey();
-            Integer quantity = entry.getValue();
-            String[] rowData = {denomination, quantity.toString()};
-            model.addRow(rowData);
-        }
-    }
 
     /**
      * ActionListener for the "Add Currency" button.

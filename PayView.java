@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The PayView class represents the view for the payment process in the vending machine application.
- * It allows the customer to make payments and complete the transaction.
+ * The {@code PayView} class represents the view for handling the payment process in the vending machine.
+ * It allows the customer to add money, calculate the change, and finish the payment.
  */
 public class PayView extends JFrame {
 
@@ -19,13 +19,13 @@ public class PayView extends JFrame {
     private TransactionHistoryView transactionHistoryView;
 
     /**
-     * Constructs a PayView instance representing the payment view of the vending machine application.
+     * Creates a new {@code PayView} for handling payment.
      *
-     * @param customer               The Customer instance representing the current user.
-     * @param currency               The Currency instance representing the available denominations.
-     * @param vendingMachine         The VendingMachine instance associated with this view.
-     * @param totalPrice            The total price of the items in the cart.
-     * @param transactionHistoryView The TransactionHistoryView instance for recording transactions.
+     * @param customer               The customer making the payment.
+     * @param currency               The currency used for the vending machine.
+     * @param vendingMachine         The vending machine for processing the payment.
+     * @param totalPrice             The total price to be paid.
+     * @param transactionHistoryView The view to display transaction history.
      */
     public PayView(Customer customer, Currency currency, VendingMachine vendingMachine,
                    double totalPrice, TransactionHistoryView transactionHistoryView) {
@@ -40,8 +40,10 @@ public class PayView extends JFrame {
         initUI();
     }
 
+    // (Existing code)
+
     /**
-     * Initializes the graphical user interface components and sets up the layout.
+     * Initializes the UI components of the PayView.
      */
     private void initUI() {
         setTitle("Payment View");
@@ -72,46 +74,47 @@ public class PayView extends JFrame {
         });
 
         JButton finishButton = new JButton("Finish Payment");
-        finishButton.addActionListener(e -> {
-            if (calculateTotalPaid() >= totalPrice) {
-                double excess = calculateTotalPaid() - totalPrice;
+    finishButton.addActionListener(e -> {
+        if (calculateTotalPaid() >= totalPrice) {
+            double excess = calculateTotalPaid() - totalPrice;
 
-                for (Map.Entry<String, Integer> entry : paidAmounts.entrySet()) {
-                    String denomination = entry.getKey();
-                    int count = entry.getValue();
-                    try {
-                        vendingMachine.refillCurrency(denomination, count);
-                    } catch (Exception exception) {
-                        JOptionPane.showMessageDialog(this, "Error processing payment: " + exception.getMessage());
-                        return;
-                    }
+            for (Map.Entry<String, Integer> entry : paidAmounts.entrySet()) {
+                String denomination = entry.getKey();
+                int count = entry.getValue();
+                try {
+                    vendingMachine.refillCurrency(denomination, count);
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(this, "Error processing payment: " + exception.getMessage());
+                    return;
                 }
-
-                Map<String, Integer> changeInDenominations = calculateChange(excess);
-
-                for (Map.Entry<String, Integer> entry : changeInDenominations.entrySet()) {
-                    String denomination = entry.getKey();
-                    int count = entry.getValue();
-                    try {
-                        vendingMachine.removeCurrency(denomination, count);
-                    } catch (Exception exception) {
-                        JOptionPane.showMessageDialog(this, "Error dispensing change: " + exception.getMessage());
-                        return;
-                    }
-                }
-
-                Transaction transaction = new Transaction(customer.getCart(), totalPrice, vendingMachine);
-                vendingMachine.addTransaction(transaction);
-                JOptionPane.showMessageDialog(this, "Payment Successful! Change: $" + String.format("%.2f", excess));
-                vendingMachine.processCart(customer.getCart());
-                customer.clearCart();
-                dispose();
-                transactionHistoryView.refresh();
-            } else {
-                JOptionPane.showMessageDialog(this, "Insufficient payment!");
             }
-            currencyView.refresh();
-        });
+
+            Map<String, Integer> changeInDenominations = calculateChange(excess);
+
+            for (Map.Entry<String, Integer> entry : changeInDenominations.entrySet()) {
+                String denomination = entry.getKey();
+                int count = entry.getValue();
+                try {
+                    vendingMachine.removeCurrency(denomination, count);
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(this, "Error dispensing change: " + exception.getMessage());
+                    return;
+                }
+            }
+
+            Transaction transaction = new Transaction(customer.getCart(), totalPrice, vendingMachine);
+        vendingMachine.addTransaction(transaction);
+            JOptionPane.showMessageDialog(this, "Payment Successful! Change: $" + String.format("%.2f", excess));
+            vendingMachine.processCart(customer.getCart());
+            customer.clearCart();
+            dispose();
+            transactionHistoryView.refresh();
+        } else {
+            JOptionPane.showMessageDialog(this, "Insufficient payment!");
+        }
+        currencyView.refresh();
+    });
+        
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> dispose());
@@ -138,19 +141,83 @@ public class PayView extends JFrame {
         setLocationRelativeTo(null);
     }
 
+
     /**
-     * Calculates the change to be given to the customer based on the excess amount.
+     * Calculates the change to be dispensed based on the excess amount paid by the customer.
      *
-     * @param excess The excess amount after payment.
-     * @return A map representing the change in denominations.
+     * @param excess The excess amount paid by the customer.
+     * @return A map containing denominations of change to be dispensed with their respective counts.
      */
     private Map<String, Integer> calculateChange(double excess) {
         Map<String, Integer> change = new HashMap<>();
         double remaining = excess;
-
-        // Calculate the change in denominations
-        // ...
-
+    
+        if (remaining >= 1000) {
+            int thousands = (int) (remaining / 1000);
+            change.put("Thousands", thousands);
+            remaining -= thousands * 1000;
+        }
+        if (remaining >= 500) {
+            int fiveHundreds = (int) (remaining / 500);
+            change.put("FiveHundreds", fiveHundreds);
+            remaining -= fiveHundreds * 500;
+        }
+        if (remaining >= 100) {
+            int hundreds = (int) (remaining / 100);
+            change.put("Hundreds", hundreds);
+            remaining -= hundreds * 100;
+        }
+        if (remaining >= 50) {
+            int fifties = (int) (remaining / 50);
+            change.put("Fifties", fifties);
+            remaining -= fifties * 50;
+        }
+        if (remaining >= 20) {
+            int twenties = (int) (remaining / 20);
+            change.put("Twenties", twenties);
+            remaining -= twenties * 20;
+        }
+        if (remaining >= 10) {
+            int tens = (int) (remaining / 10);
+            change.put("Tens", tens);
+            remaining -= tens * 10;
+        }
+        if (remaining >= 5) {
+            int fives = (int) (remaining / 5);
+            change.put("Fives", fives);
+            remaining -= fives * 5;
+        }
+        if (remaining >= 1) {
+            int ones = (int) remaining;
+            change.put("Ones", ones);
+            remaining -= ones;
+        }
+        if (remaining >= 0.5) {
+            int halfPesos = (int) (remaining / 0.5);
+            change.put("HalfPeso", halfPesos);
+            remaining -= halfPesos * 0.5;
+        }
+        if (remaining >= 0.25) {
+            int quarters = (int) (remaining / 0.25);
+            change.put("Quarter", quarters);
+            remaining -= quarters * 0.25;
+        }
+        if (remaining >= 0.10) {
+            int dimes = (int) (remaining / 0.10);
+            change.put("Dime", dimes);
+            remaining -= dimes * 0.10;
+        }
+        if (remaining >= 0.05) {
+            int nickels = (int) (remaining / 0.05);
+            change.put("Nickel", nickels);
+            remaining -= nickels * 0.05;
+        }
+        if (remaining >= 0.01) {
+            int pennies = (int) (remaining / 0.01);
+            change.put("Penny", pennies);
+            remaining -= pennies * 0.01;
+        }
+    
         return change;
     }
 
@@ -162,8 +229,51 @@ public class PayView extends JFrame {
     private double calculateTotalPaid() {
         double totalPaid = 0.0;
 
-        // Calculate the total amount paid by the customer
-        // ...
+        for (Map.Entry<String, Integer> entry : paidAmounts.entrySet()) {
+            String denomination = entry.getKey();
+            int count = entry.getValue();
+            switch (denomination) {
+                case "Thousands":
+                    totalPaid += count * 1000;
+                    break;
+                case "FiveHundreds":
+                    totalPaid += count * 500;
+                    break;
+                case "Hundreds":
+                    totalPaid += count * 100;
+                    break;
+                case "Fifties":
+                    totalPaid += count * 50;
+                    break;
+                case "Twenties":
+                    totalPaid += count * 20;
+                    break;
+                case "Tens":
+                    totalPaid += count * 10;
+                    break;
+                case "Fives":
+                    totalPaid += count * 5;
+                    break;
+                case "Ones":
+                    totalPaid += count * 1;
+                    break;
+                case "HalfPeso":
+                    totalPaid += count * 0.5;
+                    break;
+                case "Quarter":
+                    totalPaid += count * 0.25;
+                    break;
+                case "Dime":
+                    totalPaid += count * 0.10;
+                    break;
+                case "Nickel":
+                    totalPaid += count * 0.05;
+                    break;
+                case "Penny":
+                    totalPaid += count * 0.01;
+                    break;
+            }
+        }
 
         return totalPaid;
     }

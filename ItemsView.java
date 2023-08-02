@@ -26,64 +26,87 @@ public class ItemsView extends JFrame implements ChangeListener {
         initUI();
     }
 
-    private void initUI() {
-        setTitle("Items View - " + vendingMachine.getName());
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(600, 400));
+    /**
+ * Initializes the user interface components for the items view.
+ * This method sets up the window title, dimensions, and various UI elements
+ * such as table, buttons, and input fields required for managing vending machine items.
+ * It also adds action listeners to the buttons to handle user interactions.
+ */
+private void initUI() {
+    setTitle("Items View - " + vendingMachine.getName());
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setPreferredSize(new Dimension(600, 400));
 
-        String[] columnNames = {"Index", "Name", "Calories", "Price", "Saleability", "Stock"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        itemsTable = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane(itemsTable);
+    // Create the column names for the items table
+    String[] columnNames = {"Index", "Name", "Calories", "Price", "Saleability", "Stock"};
+    DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+    itemsTable = new JTable(model);
+    JScrollPane scrollPane = new JScrollPane(itemsTable);
 
-        JButton addItemButton = new JButton("Add Item");
-        addItemButton.addActionListener(new AddItemBtnListener());
+    // Create and set up the "Add Item" button to allow adding new items
+    JButton addItemButton = new JButton("Add Item");
+    addItemButton.addActionListener(new AddItemBtnListener());
 
-        JButton backButton = new JButton("Back");
-        backButton.addActionListener(new BackBtnListener());
+    // Create and set up the "Back" button to allow returning to the previous view
+    JButton backButton = new JButton("Back");
+    backButton.addActionListener(new BackBtnListener());
 
-        itemNameField = new JTextField(15);
-        JLabel itemNameLabel = new JLabel("Enter Item Name:");
+    // Create input fields and labels for item name
+    itemNameField = new JTextField(15);
+    JLabel itemNameLabel = new JLabel("Enter Item Name:");
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(itemNameLabel);
-        buttonPanel.add(itemNameField);
-        buttonPanel.add(addItemButton);
-        buttonPanel.add(backButton);
+    // Create a panel to hold the input fields and buttons
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.add(itemNameLabel);
+    buttonPanel.add(itemNameField);
+    buttonPanel.add(addItemButton);
+    buttonPanel.add(backButton);
 
-        updateTableData();
+    // Update the table with the current items data
+    updateTableData();
 
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
-        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    // Set up the main content pane and add UI components to it
+    getContentPane().setLayout(new BorderLayout());
+    getContentPane().add(scrollPane, BorderLayout.CENTER);
+    getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        pack();
-        setLocationRelativeTo(null);
+    pack(); // Pack the components to fit the preferred size
+    setLocationRelativeTo(null); // Center the window on the screen
+}
+
+/**
+ * Updates the data displayed in the items table.
+ * This method retrieves the current item data from the vending machine
+ * and populates the table with the item details, including index, name, calories, price,
+ * saleability, and stock quantity.
+ */
+private void updateTableData() {
+    DefaultTableModel model = (DefaultTableModel) itemsTable.getModel();
+    model.setRowCount(0); // Clear the existing table data
+
+    int index = 1;
+    // Get the current item data from the vending machine
+    for (Map.Entry<String, ItemWithStock> entry : vendingMachine.getItemsWithStock().entrySet()) {
+        String itemName = entry.getKey();
+        ItemWithStock itemWithStock = entry.getValue();
+        Item item = itemWithStock.getItem();
+
+        // Create a row of data with item details
+        String[] rowData = {
+                String.valueOf(index),
+                item.getName(),
+                String.valueOf(item.getCalories()),
+                String.format("$%.2f", item.getPrice()),
+                item.isSaleable() ? "Yes" : "No",
+                String.valueOf(itemWithStock.getStock())
+        };
+
+        // Add the row to the table model
+        model.addRow(rowData);
+        index++;
     }
+}
 
-    private void updateTableData() {
-        DefaultTableModel model = (DefaultTableModel) itemsTable.getModel();
-        model.setRowCount(0);
-
-        int index = 1;
-        for (Map.Entry<String, ItemWithStock> entry : vendingMachine.getItemsWithStock().entrySet()) {
-            String itemName = entry.getKey();
-            ItemWithStock itemWithStock = entry.getValue();
-            Item item = itemWithStock.getItem();
-
-            String[] rowData = {
-                    String.valueOf(index),
-                    item.getName(),
-                    String.valueOf(item.getCalories()),
-                    String.format("$%.2f", item.getPrice()),
-                    item.isSaleable() ? "Yes" : "No",
-                    String.valueOf(itemWithStock.getStock())
-            };
-
-            model.addRow(rowData);
-            index++;
-        }
-    }
 
     /**
      * ActionListener for the "Add Item" button.
