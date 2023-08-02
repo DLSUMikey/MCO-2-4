@@ -47,7 +47,8 @@ public class VendingMachineModel {
     }
 
     public SpecialVendingMachine createSpecialVendingMachine() {
-        SpecialVendingMachine specialVendingMachine = new SpecialVendingMachine("GoDio's Special Vending Machine", 15, 10);
+
+        SpecialVendingMachine specialVendingMachine = new SpecialVendingMachine("GoDio's Special Vending Machine", 15, 10, customer);
         JOptionPane.showMessageDialog(null, "GoDio's Special Vending Machine has been created.");
         this.vendingMachine = specialVendingMachine;
         return specialVendingMachine;

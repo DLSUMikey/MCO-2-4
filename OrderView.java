@@ -10,8 +10,6 @@ public class OrderView extends JFrame implements ChangeListener {
     private JTable itemsTable;
     private JTextField orderTextField; // Text field for user input
     private Customer customer; // Reference to the customer
-    private String selectedBread;
-    private String selectedMeat;
 
     public OrderView(VendingMachine vendingMachine, Customer customer) {
         this.vendingMachine = vendingMachine;
@@ -44,7 +42,7 @@ public class OrderView extends JFrame implements ChangeListener {
         backButton.addActionListener(new BackBtnListener(customer));
         
         JButton goToCartButton = new JButton("Go To Cart");
-        goToCartButton.addActionListener(new GoToCartBtnListener(selectedBread, selectedMeat));
+        goToCartButton.addActionListener(new GoToCartBtnListener());
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(backButton);
@@ -117,20 +115,16 @@ public class OrderView extends JFrame implements ChangeListener {
     }
 
     class GoToCartBtnListener implements ActionListener {
-        private String selectedBread;
-        private String selectedMeat;
-
-        public GoToCartBtnListener(String selectedBread, String selectedMeat) {
-            this.selectedBread = selectedBread;
-            this.selectedMeat = selectedMeat;
-        }
-        
         @Override
         public void actionPerformed(ActionEvent e) {
             // Check if the cart is valid for sandwich making
             if (vendingMachine instanceof SpecialVendingMachine) {
                 SpecialVendingMachine specialVendingMachine = (SpecialVendingMachine) vendingMachine;
-                if (specialVendingMachine.isValidSandwichCart(customer.getCart())) {
+                Map<String, String> sandwichComponents = specialVendingMachine.isValidSandwichCart(customer.getCart());
+                if (sandwichComponents != null) {
+                    String selectedBread = sandwichComponents.get("selectedBread");
+                    String selectedMeat = sandwichComponents.get("selectedMeat");
+    
                     // Cart is valid for sandwich making, show toppings selection interface
                     Map<String, ItemWithStock> availableToppings = specialVendingMachine.getAvailableToppings();
                     if (!availableToppings.isEmpty()) {
@@ -149,6 +143,7 @@ public class OrderView extends JFrame implements ChangeListener {
             cartView.setVisible(true);
         }
     }
+    
     
 
     class BackBtnListener implements ActionListener {
