@@ -16,10 +16,10 @@ public class RegularVendingMachine extends VendingMachine {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addItem'");
     }
-}
 
     @Override
     public Currency getCurrency() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getCurrency'");
     }
+}
