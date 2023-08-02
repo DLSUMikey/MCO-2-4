@@ -10,13 +10,4 @@ public class RegularVendingMachine extends VendingMachine {
         System.out.println("Regular Vending Machine is vending.");
     }
     
-
-    @Override
-    public Currency getCurrency() {
-        return this.currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
 }

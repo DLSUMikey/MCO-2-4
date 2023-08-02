@@ -5,13 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-public class ItemsView extends JFrame {
+public class ItemsView extends JFrame implements ChangeListener {
     private VendingMachine vendingMachine;
     private JTable itemsTable;
     private JTextField itemNameField;
 
     public ItemsView(VendingMachine vendingMachine) {
         this.vendingMachine = vendingMachine;
+        vendingMachine.addChangeListener(this); // Register this view as a change listener
         initUI();
     }
 
@@ -141,5 +142,10 @@ public class ItemsView extends JFrame {
         public void actionPerformed(ActionEvent e) {
             setVisible(false);
         }
+    }
+
+    @Override
+    public void stateChanged() {
+        updateTableData(); // Called when the state of VendingMachine changes
     }
 }

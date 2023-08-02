@@ -1,6 +1,9 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
 
 public abstract class VendingMachine {
     private String name;
@@ -8,6 +11,17 @@ public abstract class VendingMachine {
     private int maxStocks;
     private Map<String, ItemWithStock> itemsWithStock = new LinkedHashMap<>(); // Use a map to store items with placeholder names and stock
     protected Currency currency;
+    private final List<ChangeListener> changeListeners = new ArrayList<>();
+
+    public void addChangeListener(ChangeListener changeListener) {
+        changeListeners.add(changeListener);
+    }
+    
+    private void notifyChangeListeners() {
+        for (ChangeListener listener : changeListeners) {
+            listener.stateChanged();
+        }
+    }
 
     public VendingMachine(String name, int maxSlots, int maxStocks) {
         this(name, maxSlots, maxStocks, new Currency(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
@@ -36,7 +50,10 @@ public abstract class VendingMachine {
     }
 
 
-    public abstract Currency getCurrency();
+    public Currency getCurrency() {
+        return this.currency;
+    };
+    
 
     public void refillCurrency(String denomination, int quantityToRefill) {
         switch (denomination) {
@@ -86,6 +103,7 @@ public abstract class VendingMachine {
             // If the item does not exist, add it to the map
             itemsWithStock.put(item.getName(), new ItemWithStock(item, 1));
         }
+        notifyChangeListeners();
     }
 
     // Create default placeholder items with stock 0
@@ -140,15 +158,5 @@ public abstract class VendingMachine {
         }
     }
 
-    // Display the items available in the vending machine along with their stocks
-    public void displayItems() {
-        System.out.println("Items available in " + name + ":");
-        for (Map.Entry<String, ItemWithStock> entry : itemsWithStock.entrySet()) {
-            String itemName = entry.getKey();
-            ItemWithStock itemWithStock = entry.getValue();
-            System.out.println(itemName + " - Price: $" + itemWithStock.getItem().getPrice() +
-                    " - Stock: " + itemWithStock.getStock());
-        }
-    }
 
 }

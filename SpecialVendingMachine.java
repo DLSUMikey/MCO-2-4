@@ -11,9 +11,5 @@ public class SpecialVendingMachine extends VendingMachine {
     }
 
 
-    @Override
-    public Currency getCurrency() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCurrency'");
-    }
+
 }

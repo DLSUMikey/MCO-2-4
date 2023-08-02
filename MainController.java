@@ -8,12 +8,14 @@ public class MainController {
     private TestingView testView;
     private MaintenanceView maintenanceView;
     private ItemsView itemsView;
+    private CurrencyView currView;
+    private OrderView ordView;
 
     public MainController() {
         mainView = new MainView();
         testView = new TestingView();
         maintenanceView = new MaintenanceView(mainView);
-        model = new VendingMachineModel(mainView, testView, maintenanceView);
+        model = new VendingMachineModel(mainView, testView, maintenanceView, currView, ordView );
 
         // Add listeners to the view's buttons
         mainView.addRegularVendingMachineBtnListener(new RegularVendingMachineListener());
@@ -41,19 +43,27 @@ public class MainController {
             // Handle Regular Vending Machine button click
             // Call the model to process the action
             VendingMachine vendingMachine = model.createRegularVendingMachine();
-            itemsView = new ItemsView(vendingMachine);
+            ItemsView itemsView = new ItemsView(vendingMachine);
+            CurrencyView currView = new CurrencyView(vendingMachine);
+            OrderView ordView = new OrderView(vendingMachine);
             model.setItemsView(itemsView);
+            model.setCurrView(currView);
+            model.setOrdView(ordView);
         }
     }
-
+    
     class SpecialVendingMachineListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Handle Special Vending Machine button click
             // Call the model to process the action
             VendingMachine vendingMachine = model.createSpecialVendingMachine();
-            itemsView = new ItemsView(vendingMachine);
+            ItemsView itemsView = new ItemsView(vendingMachine);
+            CurrencyView currView = new CurrencyView(vendingMachine);
+            OrderView ordView = new OrderView(vendingMachine);
             model.setItemsView(itemsView);
+            model.setCurrView(currView);
+            model.setOrdView(ordView);
         }
     }
 
@@ -63,6 +73,7 @@ public class MainController {
             // Handle Special Vending Machine button click
             // Call the model to process the action
             model.testVendingMachine();
+            
         }
     }
 

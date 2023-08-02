@@ -1,3 +1,6 @@
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class Currency {
     private int thousands;
     private int fiveHundreds;
@@ -26,6 +29,23 @@ public class Currency {
         this.dime = dime;
         this.nickel = nickel;
         this.penny = penny;
+    }
+
+    public Map<String, Integer> getDenominations() {
+        Map<String, Integer> denominations = new LinkedHashMap<>(); // Keep insertion order for display purposes
+        denominations.put("Thousands", getThousands());
+        denominations.put("Five Hundreds", getFiveHundreds());
+        denominations.put("Hundreds", getHundreds());
+        denominations.put("Fifties", getFifties());
+        denominations.put("Tens", getTens());
+        denominations.put("Fives", getFives());
+        denominations.put("Ones", getOnes());
+        denominations.put("Half Peso", getHalfPeso());
+        denominations.put("Quarter", getQuarter());
+        denominations.put("Dime", getDime());
+        denominations.put("Nickel", getNickel());
+        denominations.put("Penny", getPenny());
+        return denominations;
     }
 
     // Getters
