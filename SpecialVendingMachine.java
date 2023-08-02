@@ -10,11 +10,6 @@ public class SpecialVendingMachine extends VendingMachine {
         System.out.println("Special Vending Machine is vending.");
     }
 
-    @Override
-    public void addItem(Item item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addItem'");
-    }
 
     @Override
     public Currency getCurrency() {
