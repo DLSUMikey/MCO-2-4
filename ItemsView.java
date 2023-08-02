@@ -5,14 +5,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
+/**
+ * The ItemsView class represents a graphical user interface for displaying and managing items in a vending machine.
+ * It allows the user to add new items to the vending machine and view the existing items with their details.
+ */
+@SuppressWarnings("unused")
 public class ItemsView extends JFrame implements ChangeListener {
     private VendingMachine vendingMachine;
     private JTable itemsTable;
     private JTextField itemNameField;
 
+    /**
+     * Creates a new ItemsView instance associated with the given VendingMachine.
+     *
+     * @param vendingMachine The VendingMachine to be associated with this view.
+     */
     public ItemsView(VendingMachine vendingMachine) {
         this.vendingMachine = vendingMachine;
-        vendingMachine.addChangeListener(this); // Register this view as a change listener
+        vendingMachine.addChangeListener(this);
         initUI();
     }
 
@@ -75,10 +85,10 @@ public class ItemsView extends JFrame implements ChangeListener {
         }
     }
 
-    public void updateView() {
-        updateTableData();
-    }
-
+    /**
+     * ActionListener for the "Add Item" button.
+     * This listener adds a new item to the vending machine based on the user input.
+     */
     class AddItemBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -86,8 +96,8 @@ public class ItemsView extends JFrame implements ChangeListener {
             if (!itemName.isEmpty()) {
                 Item newItem = createItem(itemName);
                 if (newItem != null) {
-                    vendingMachine.addItem(newItem);  // Add item directly
-                    updateTableData(); // Refresh the table to show the updated items
+                    vendingMachine.addItem(newItem);
+                    updateTableData();
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid item name.");
                 }
@@ -96,11 +106,16 @@ public class ItemsView extends JFrame implements ChangeListener {
             }
         }
     }
-    
-    // Method to create an item based on its name
+
+    /**
+     * Creates an Item instance based on the given item name.
+     * This method is used to add new items to the vending machine.
+     *
+     * @param itemName The name of the item to create.
+     * @return The newly created Item instance, or null if the item name is not recognized.
+     */
     public Item createItem(String itemName) {
-        // Here, you can define the item properties based on their names
-        switch(itemName) {
+        switch (itemName) {
             case "Garlic Bread":
                 return new Item("Garlic Bread", 120, 30.00, true);
             case "Wheat Bread":
@@ -122,7 +137,7 @@ public class ItemsView extends JFrame implements ChangeListener {
             case "Ketchup":
                 return new Item("Ketchup", 20, 20.00, false);
             case "Onion":
-                return new Item("Onion",10, 10.00, false);
+                return new Item("Onion", 10, 10.00, false);
             case "TurkeyStrips":
                 return new Item("TurkeyStrips", 30, 40.00, false);
             case "Sausage":
@@ -132,11 +147,14 @@ public class ItemsView extends JFrame implements ChangeListener {
             case "Mayonnaise":
                 return new Item("Mayonnaise", 90, 5.00, false);
             default:
-                return null; // Return null if the item name doesn't match any of the predefined items
+                return null;
         }
     }
-    
 
+    /**
+     * ActionListener for the "Back" button.
+     * This listener hides the ItemsView frame.
+     */
     class BackBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -146,6 +164,6 @@ public class ItemsView extends JFrame implements ChangeListener {
 
     @Override
     public void stateChanged() {
-        updateTableData(); // Called when the state of VendingMachine changes
+        updateTableData();
     }
 }

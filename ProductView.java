@@ -10,13 +10,28 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+/**
+ * The ProductView class represents a dialog for creating a custom meal with selected toppings.
+ * It allows the customer to choose toppings for the meal, calculate the price and calories, and add it to their cart.
+ */
+@SuppressWarnings("unused")
 public class ProductView extends JDialog {
+
     private Map<String, ItemWithStock> availableToppings;
     private String selectedBread;
     private String selectedMeat;
     private Customer customer;
 
-    public ProductView(Map<String, ItemWithStock> availableToppings, Customer customer, String selectedBread, String selectedMeat) {
+    /**
+     * Constructs a ProductView instance for creating a custom meal.
+     *
+     * @param availableToppings A map containing available toppings with their stock information.
+     * @param customer          The Customer instance representing the current user.
+     * @param selectedBread     The selected bread for the meal.
+     * @param selectedMeat      The selected meat for the meal.
+     */
+    public ProductView(Map<String, ItemWithStock> availableToppings, Customer customer,
+                       String selectedBread, String selectedMeat) {
         this.availableToppings = availableToppings;
         this.customer = customer;
         this.selectedBread = selectedBread;
@@ -38,11 +53,9 @@ public class ProductView extends JDialog {
 
         JButton finishButton = new JButton("Finish");
         finishButton.addActionListener(e -> {
-            // Compute the price and calories of the meal
             double price = 0.0;
             int calories = 0;
 
-            // Add the price and calories of the selected bread and meat
             ItemWithStock breadItemWithStock = availableToppings.get(selectedBread);
             ItemWithStock meatItemWithStock = availableToppings.get(selectedMeat);
             if (breadItemWithStock != null && breadItemWithStock.getItem() != null
@@ -51,13 +64,11 @@ public class ProductView extends JDialog {
                 calories += breadItemWithStock.getItem().getCalories() + meatItemWithStock.getItem().getCalories();
             }
 
-            // Compute the phrases to be displayed
             List<String> messages = new ArrayList<>();
             messages.add("Slicing Bread...");
             for (Map.Entry<JCheckBox, Item> entry : checkBoxes.entrySet()) {
                 JCheckBox checkBox = entry.getKey();
                 Item topping = entry.getValue();
-                // If the topping is selected, add its price and calories to the meal
                 if (checkBox.isSelected()) {
                     price += topping.getPrice();
                     calories += topping.getCalories();
@@ -101,12 +112,10 @@ public class ProductView extends JDialog {
                         default:
                             break;
                     }
-                    // Add the topping to the cart
                     customer.addItemToCart(topping.getName());
                 }
             }
-            
-            // Show the preparing meal view
+
             new PreparingMealView(messages).setVisible(true);
 
             System.out.println("The meal's price is: " + price);
@@ -116,7 +125,6 @@ public class ProductView extends JDialog {
 
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(e -> {
-            // User decided not to make the meal, so just close the dialog
             dispose();
         });
 

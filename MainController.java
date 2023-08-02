@@ -1,6 +1,11 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+/**
+ * The MainController class acts as the controller in the MVC architecture for the vending machine application.
+ * It manages the interactions between the model (VendingMachineModel) and the views (MainView, TestingView, MaintenanceView, ItemsView, CurrencyView, OrderView, TransactionHistoryView).
+ * It handles button click events and initializes the main components of the application.
+ */
+@SuppressWarnings("unused")
 public class MainController {
 
     private MainView mainView;
@@ -13,25 +18,28 @@ public class MainController {
     private Customer customer;
     private TransactionHistoryView transactionHistoryView;
 
+    /**
+     * Constructs a MainController instance and initializes the main components of the application.
+     */
     public MainController() {
         mainView = new MainView();
         testView = new TestingView();
         maintenanceView = new MaintenanceView(mainView);
-        model = new VendingMachineModel(mainView, testView, maintenanceView, currView, ordView, transactionHistoryView );
+        model = new VendingMachineModel(mainView, testView, maintenanceView, currView, ordView, transactionHistoryView);
         customer = new Customer("User");
 
-        // Add listeners to the view's buttons
+        // MainView button listeners
         mainView.addRegularVendingMachineBtnListener(new RegularVendingMachineListener());
         mainView.addSpecialVendingMachineBtnListener(new SpecialVendingMachineListener());
         mainView.addTestVendingMachineBtnListener(new TestVendingMachineListener());
         mainView.addExitBtnListener(new ExitBtnListener());
 
-        // Add listeners to the testing view's buttons
+        // TestingView button listeners
         testView.addOrderBtnListener(new OrderBtnListener());
         testView.addMaintenanceBtnListener(new MaintenanceBtnListener());
         testView.addBackBtnListener(new BackBtnListener());
 
-        // Add listeners to the maintenance view's buttons
+        // MaintenanceView button listeners
         maintenanceView.getItemManagementButton().addActionListener(new ItemManagementBtnListener());
         maintenanceView.getCurrencyStorageButton().addActionListener(new CurrencyStorageBtnListener());
         maintenanceView.getTransactionsButton().addActionListener(new TransactionsBtnListener());
@@ -40,11 +48,13 @@ public class MainController {
         mainView.setVisible(true);
     }
 
+    /**
+     * ActionListener for the "Regular Vending Machine" button in the MainView.
+     * Creates a regular vending machine, associated views, and sets them in the model.
+     */
     class RegularVendingMachineListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Handle Regular Vending Machine button click
-            // Call the model to process the action
             VendingMachine vendingMachine = model.createRegularVendingMachine();
             ItemsView itemsView = new ItemsView(vendingMachine);
             CurrencyView currView = new CurrencyView(vendingMachine);
@@ -57,11 +67,13 @@ public class MainController {
         }
     }
     
+    /**
+     * ActionListener for the "Special Vending Machine" button in the MainView.
+     * Creates a special vending machine, associated views, and sets them in the model.
+     */
     class SpecialVendingMachineListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Handle Special Vending Machine button click
-            // Call the model to process the action
             VendingMachine vendingMachine = model.createSpecialVendingMachine();
             ItemsView itemsView = new ItemsView(vendingMachine);
             CurrencyView currView = new CurrencyView(vendingMachine);
@@ -74,43 +86,54 @@ public class MainController {
         }
     }
 
+    /**
+     * ActionListener for the "Test Vending Machine" button in the MainView.
+     * Initiates the testing mode for the vending machine.
+     */
     class TestVendingMachineListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Handle Special Vending Machine button click
-            // Call the model to process the action
             model.testVendingMachine();
-            
         }
     }
 
+    /**
+     * ActionListener for the "Exit" button in the MainView.
+     * Exits the vending machine program.
+     */
     class ExitBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Handle Exit button click
-            // Call the model to process the action
             model.exitProgram();
         }
     }
 
-    // Add action listeners for buttons in the TestingView
+    /**
+     * ActionListener for the "Order" button in the TestingView.
+     * Initiates the order process for the vending machine.
+     */
     class OrderBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Implement the logic for Order button
             model.orderVendingMachine(ordView);
         }
     }
 
+    /**
+     * ActionListener for the "Maintenance" button in the TestingView.
+     * Initiates the maintenance process for the vending machine.
+     */
     class MaintenanceBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Implement the logic for Maintenance button
             model.maintainVendingMachine();
-
         }
     }
 
+    /**
+     * ActionListener for the "Item Management" button in the MaintenanceView.
+     * Initiates the item management process for the vending machine.
+     */
     class ItemManagementBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -119,36 +142,48 @@ public class MainController {
         }
     }
 
+    /**
+     * ActionListener for the "Currency Storage" button in the MaintenanceView.
+     * Initiates the currency storage management process for the vending machine.
+     */
     class CurrencyStorageBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Call the model to process the action
             model.manageCurrencyStorage();
         }
     }
 
+    /**
+     * ActionListener for the "Transactions" button in the MaintenanceView.
+     * Initiates the transaction view process for the vending machine.
+     */
     class TransactionsBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Call the model to process the action
             model.viewTransactions();
         }
     }
 
+    /**
+     * ActionListener for the "Back" button in the MaintenanceView.
+     * Navigates back to the previous view.
+     */
     class BackBtn1Listener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Call the model to process the action
             model.goBack();
         }
     }
 
+    /**
+     * ActionListener for the "Back" button in the TestingView.
+     * Navigates back to the previous view.
+     */
     class BackBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Implement the logic for Back button
-            // Close the TestingView and reopen the MainView
             model.testingViewBack();
         }
     }
 }
+
