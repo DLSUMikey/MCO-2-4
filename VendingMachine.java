@@ -106,6 +106,14 @@ public abstract class VendingMachine {
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
+
+    public VendingMachine() {
+        this.transactions = new ArrayList<>();
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
     
     public void removeCurrency(String denomination, int quantityToRemove) throws Exception{
         switch (denomination) {
@@ -238,21 +246,57 @@ public abstract class VendingMachine {
         notifyChangeListeners();
     }
 
+    public void removeItem(String itemName) {
+        // Get the item with stock from the map
+        ItemWithStock itemWithStock = itemsWithStock.get(itemName);
+        if (itemWithStock != null) {
+            // Check if the stock is more than 1
+            if (itemWithStock.getStock() > 1) {
+                // If the stock is more than 1, reduce the stock
+                itemWithStock.setStock(itemWithStock.getStock() - 1);
+                System.out.println(itemName + " removed. Current stock: " + itemWithStock.getStock());
+            } else {
+                // If the stock is 1 or less, remove the item from the map
+                itemsWithStock.remove(itemName);
+                System.out.println(itemName + " removed. The item is now out of stock.");
+            }
+            notifyChangeListeners();
+        } else {
+            System.out.println("Item not found: " + itemName);
+        }
+    }
+
+    public void processCart(Map<String, Integer> cart) {
+        for (Map.Entry<String, Integer> entry : cart.entrySet()) {
+            String itemName = entry.getKey();
+            int quantity = entry.getValue();
+            try {
+                for (int i = 0; i < quantity; i++) {
+                    removeItem(itemName);
+                }
+            } catch (Exception e) {
+                // Handle exception if the item can't be removed
+                e.printStackTrace();
+            }
+        }
+    }
+    
+
     // Create default placeholder items with stock 0
     private void createDefaultItems() {
         Item placeholder1 = new Item("Garlic Bread", 120, 30.00, true);
         Item placeholder2 = new Item("Wheat Bread", 90, 35.00, true);
         Item placeholder3 = new Item("White Bread", 150, 20.50, true);
-        Item placeholder4 = new Item("Cheese", 100, 20.00, true);
+        Item placeholder4 = new Item("Cheese", 100, 20.00, false);
         Item placeholder5 = new Item("Bacon Strips", 90, 50.00, true);
         Item placeholder6 = new Item("Ham Strips", 90, 40.50, true);
-        Item placeholder7 = new Item("Lettuce", 10, 40.00, true);
-        Item placeholder8 = new Item("Pickles", 10, 15.50, true);
+        Item placeholder7 = new Item("Lettuce", 10, 40.00, false);
+        Item placeholder8 = new Item("Pickles", 10, 15.50, false);
         Item placeholder9 = new Item("Mustard", 5, 5.00, false);
         Item placeholder10 = new Item("Ketchup", 20, 20.00, false);
         Item placeholder11 = new Item("Onion",10, 10.00, false);
-        Item placeholder12 = new Item("Turkey Strips", 30, 40.00, false);
-        Item placeholder13 = new Item("Sausage", 90, 30.00, false);
+        Item placeholder12 = new Item("Turkey Strips", 30, 40.00, true);
+        Item placeholder13 = new Item("Sausage", 90, 30.00, true);
         Item placeholder14 = new Item("Cucumber", 15, 20.00, false);
         Item placeholder15 = new Item("Mayonnaise", 90, 5.00, false);
     
@@ -278,6 +322,8 @@ public abstract class VendingMachine {
     public Map<String, ItemWithStock> getItemsWithStock() {
         return itemsWithStock;
     }
+
+    
 
     // Restock an item by adding the specified quantity to its stock or add new item if not found
     public void restockItem(String itemName, int quantityToAdd) {

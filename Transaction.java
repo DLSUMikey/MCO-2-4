@@ -41,12 +41,21 @@ public class Transaction {
         return totalCalories;
     }
 
-    @Override
     public String toString() {
-        return "Transaction{" +
-                "items=" + items +
-                ", totalPrice=" + totalPrice +
-                ", totalCalories=" + totalCalories +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Transaction:\n");
+    
+        for (Map.Entry<Item, Integer> entry : items.entrySet()) {
+            sb.append("Item: ")
+              .append(entry.getKey().getName())
+              .append(", Quantity: ")
+              .append(entry.getValue())
+              .append("\n");
+        }
+    
+        sb.append("Total Price: ").append(totalPrice);
+        sb.append("Total Calories: ").append(totalCalories);
+    
+        return sb.toString();
     }
 }

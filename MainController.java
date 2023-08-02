@@ -11,12 +11,13 @@ public class MainController {
     private CurrencyView currView;
     private OrderView ordView;
     private Customer customer;
+    private TransactionHistoryView transactionHistoryView;
 
     public MainController() {
         mainView = new MainView();
         testView = new TestingView();
         maintenanceView = new MaintenanceView(mainView);
-        model = new VendingMachineModel(mainView, testView, maintenanceView, currView, ordView );
+        model = new VendingMachineModel(mainView, testView, maintenanceView, currView, ordView, transactionHistoryView );
         customer = new Customer("User");
 
         // Add listeners to the view's buttons
@@ -48,9 +49,11 @@ public class MainController {
             ItemsView itemsView = new ItemsView(vendingMachine);
             CurrencyView currView = new CurrencyView(vendingMachine);
             OrderView ordView = new OrderView(vendingMachine, customer);
+            TransactionHistoryView transView = new TransactionHistoryView(vendingMachine);
             model.setItemsView(itemsView);
             model.setCurrView(currView);
             model.setOrdView(ordView);
+            model.setTransView(transView);
         }
     }
     
@@ -63,9 +66,11 @@ public class MainController {
             ItemsView itemsView = new ItemsView(vendingMachine);
             CurrencyView currView = new CurrencyView(vendingMachine);
             OrderView ordView = new OrderView(vendingMachine, customer);
+            TransactionHistoryView transView = new TransactionHistoryView(vendingMachine);
             model.setItemsView(itemsView);
             model.setCurrView(currView);
             model.setOrdView(ordView);
+            model.setTransView(transView);
         }
     }
 

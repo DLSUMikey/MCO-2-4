@@ -9,10 +9,12 @@ public class CartView extends JFrame {
     private Customer customer;
     private VendingMachine vendingMachine;
     private JTable cartTable;
+    private TransactionHistoryView transactionHistoryView;
 
-    public CartView(Customer customer, VendingMachine vendingMachine) {
+    public CartView(Customer customer, VendingMachine vendingMachine, TransactionHistoryView transactionHistoryView) { // Add TransactionHistoryView to the constructor parameters
         this.customer = customer;
         this.vendingMachine = vendingMachine;
+        this.transactionHistoryView = transactionHistoryView; // Initialize transactionHistoryView from the parameter
         initUI();
     }
 
@@ -104,7 +106,7 @@ public class CartView extends JFrame {
         public void actionPerformed(ActionEvent e) {
             // Create and display the PayView passing the necessary data
             double totalPrice = calculateTotalPrice();
-            PayView payView = new PayView(customer, vendingMachine.getCurrency(), vendingMachine, totalPrice); // Pass totalPrice to PayView
+            PayView payView = new PayView(customer, vendingMachine.getCurrency(), vendingMachine, totalPrice, transactionHistoryView); // Pass totalPrice to PayView
             payView.setVisible(true);
             CartView.this.setVisible(false);
         }

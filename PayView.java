@@ -11,14 +11,16 @@ public class PayView extends JFrame {
     private Map<String, Integer> paidAmounts;
     private JLabel totalPaidLabel;
     private CurrencyView currencyView;
+    private TransactionHistoryView transactionHistoryView;
 
-public PayView(Customer customer, Currency currency, VendingMachine vendingMachine, double totalPrice) {
+public PayView(Customer customer, Currency currency, VendingMachine vendingMachine, double totalPrice, TransactionHistoryView transactionHistoryView) {
     this.customer = customer;
     this.currency = currency;
     this.vendingMachine = vendingMachine; // Initialize vendingMachine from the parameter
     this.totalPrice = totalPrice;
     this.paidAmounts = new HashMap<>();
     this.currencyView = new CurrencyView(vendingMachine);
+    this.transactionHistoryView = transactionHistoryView;
 
     initUI();
 }
@@ -91,8 +93,10 @@ public PayView(Customer customer, Currency currency, VendingMachine vendingMachi
             Transaction transaction = new Transaction(customer.getCart(), totalPrice, vendingMachine);
         vendingMachine.addTransaction(transaction);
             JOptionPane.showMessageDialog(this, "Payment Successful! Change: $" + String.format("%.2f", excess));
+            vendingMachine.processCart(customer.getCart());
             customer.clearCart();
             dispose();
+            transactionHistoryView.refresh();
         } else {
             JOptionPane.showMessageDialog(this, "Insufficient payment!");
         }

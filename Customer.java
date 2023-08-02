@@ -16,7 +16,7 @@ public class Customer {
     }
 
     public Map<String, Integer> getCart() {
-        return cart;
+        return this.cart;
     }
 
     public void addItemToCart(String itemName) {
@@ -24,6 +24,8 @@ public class Customer {
         // If the item already exists in the cart, increment the quantity.
         cart.put(itemName, cart.getOrDefault(itemName, 0) + 1);
     }
+
+    
 
     public void clearCart() {
         cart.clear();

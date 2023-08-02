@@ -10,6 +10,8 @@ public class OrderView extends JFrame implements ChangeListener {
     private JTable itemsTable;
     private JTextField orderTextField; // Text field for user input
     private Customer customer; // Reference to the customer
+    private String selectedBread;
+    private String selectedMeat;
 
     public OrderView(VendingMachine vendingMachine, Customer customer) {
         this.vendingMachine = vendingMachine;
@@ -42,7 +44,7 @@ public class OrderView extends JFrame implements ChangeListener {
         backButton.addActionListener(new BackBtnListener(customer));
         
         JButton goToCartButton = new JButton("Go To Cart");
-        goToCartButton.addActionListener(new GoToCartBtnListener());
+        goToCartButton.addActionListener(new GoToCartBtnListener(selectedBread, selectedMeat));
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(backButton);
@@ -115,13 +117,39 @@ public class OrderView extends JFrame implements ChangeListener {
     }
 
     class GoToCartBtnListener implements ActionListener {
+        private String selectedBread;
+        private String selectedMeat;
+
+        public GoToCartBtnListener(String selectedBread, String selectedMeat) {
+            this.selectedBread = selectedBread;
+            this.selectedMeat = selectedMeat;
+        }
+        
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Create and display the CartView passing the customer instance
-            CartView cartView = new CartView(customer, vendingMachine);
+            // Check if the cart is valid for sandwich making
+            if (vendingMachine instanceof SpecialVendingMachine) {
+                SpecialVendingMachine specialVendingMachine = (SpecialVendingMachine) vendingMachine;
+                if (specialVendingMachine.isValidSandwichCart(customer.getCart())) {
+                    // Cart is valid for sandwich making, show toppings selection interface
+                    Map<String, ItemWithStock> availableToppings = specialVendingMachine.getAvailableToppings();
+                    if (!availableToppings.isEmpty()) {
+                        // Open the toppings selection interface
+                        ProductView productView = new ProductView(availableToppings, customer, selectedBread, selectedMeat);
+                        productView.setVisible(true);
+                    } else {
+                        System.out.println("No toppings available for sandwich making.");
+                    }
+                }
+            }
+            
+            // Go to the cart as usual
+            TransactionHistoryView transactionHistoryView = new TransactionHistoryView(vendingMachine);
+            CartView cartView = new CartView(customer, vendingMachine, transactionHistoryView);
             cartView.setVisible(true);
         }
     }
+    
 
     class BackBtnListener implements ActionListener {
         private Customer customer;

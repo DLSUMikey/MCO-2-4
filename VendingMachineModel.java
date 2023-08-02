@@ -13,11 +13,13 @@ public class VendingMachineModel {
     private CurrencyView currView;
     private OrderView ordView;
     private Customer customer;
+    private TransactionHistoryView transView;
 
-    public VendingMachineModel(MainView mainView, TestingView testingView, MaintenanceView maintenanceView, CurrencyView currView, OrderView ordView) {
+    public VendingMachineModel(MainView mainView, TestingView testingView, MaintenanceView maintenanceView, CurrencyView currView, OrderView ordView, TransactionHistoryView transView) {
         this.mainView = mainView;
         this.testingView = testingView;
         this.maintenanceView = maintenanceView;
+        this.transView = transView;
     }
 
     // Method to set the ItemsView after the vending machine is created
@@ -31,6 +33,10 @@ public class VendingMachineModel {
 
     public void setOrdView(OrderView ordView) {
         this.ordView = ordView;
+    }
+
+    public void setTransView(TransactionHistoryView transView) {
+        this.transView = transView;
     }
 
     public RegularVendingMachine createRegularVendingMachine() {
@@ -76,6 +82,13 @@ public class VendingMachineModel {
     }
 
     public void viewTransactions() {
+        if (transView == null) {
+            transView = new TransactionHistoryView(vendingMachine);
+        } else {
+            transView.refresh(); // If the view already exists, refresh it before displaying
+        }
+
+        transView.setVisible(true);
         System.out.println("Viewing transactions...");
     }
 

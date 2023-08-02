@@ -101,12 +101,12 @@ public class ItemsView extends JFrame implements ChangeListener {
     public Item createItem(String itemName) {
         // Here, you can define the item properties based on their names
         switch(itemName) {
-            case "GarlicBread":
-                return new Item("GarlicBread", 120, 30.00, true);
-            case "WheatBread":
-                return new Item("WheatBread", 90, 35.00, true);
-            case "WhiteBread":
-                return new Item("WhiteBread", 150, 20.50, true);
+            case "Garlic Bread":
+                return new Item("Garlic Bread", 120, 30.00, true);
+            case "Wheat Bread":
+                return new Item("Wheat Bread", 90, 35.00, true);
+            case "White Bread":
+                return new Item("White Bread", 150, 20.50, true);
             case "Cheese":
                 return new Item("Cheese", 100, 20.00, true);
             case "BaconStrips":
