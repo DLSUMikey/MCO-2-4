@@ -19,7 +19,10 @@ public class RegularVendingMachine extends VendingMachine {
 
     @Override
     public Currency getCurrency() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCurrency'");
+        return this.currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }

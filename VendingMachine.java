@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class VendingMachine {
@@ -7,7 +9,7 @@ public abstract class VendingMachine {
     private int maxSlots;
     private int maxStocks;
     private Map<String, ItemWithStock> itemsWithStock = new LinkedHashMap<>(); // Use a map to store items with placeholder names and stock
-    private Currency currency;
+    protected Currency currency;
 
     public VendingMachine(String name, int maxSlots, int maxStocks) {
         this(name, maxSlots, maxStocks, new Currency(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
@@ -120,15 +122,17 @@ public abstract class VendingMachine {
     }
 
     // Restock an item by adding the specified quantity to its stock or add new item if not found
-    public void restockItem(String itemName, int quantityToAdd) {
-        ItemWithStock itemWithStock = itemsWithStock.get(itemName);
-        if (itemWithStock != null) {
-            itemWithStock.setStock(itemWithStock.getStock() + quantityToAdd);
-            System.out.println(itemWithStock.getItem().getName() + " has been restocked. Current stock: " + itemWithStock.getStock());
-        } else {
-            System.out.println("Placeholder item not found: " + itemName);
-        }
+    public void restockItem(int itemIndex, int quantityToAdd) {
+    List<ItemWithStock> itemList = new ArrayList<>(itemsWithStock.values());
+
+    if (itemIndex >= 0 && itemIndex < itemList.size()) {
+        ItemWithStock itemWithStock = itemList.get(itemIndex);
+        itemWithStock.setStock(itemWithStock.getStock() + quantityToAdd);
+        System.out.println(itemWithStock.getItem().getName() + " has been restocked. Current stock: " + itemWithStock.getStock());
+    } else {
+        System.out.println("Invalid item index: " + itemIndex);
     }
+}
 
     // Display the items available in the vending machine along with their stocks
     public void displayItems() {

@@ -6,22 +6,33 @@ public class MainController {
     private MainView mainView;
     private VendingMachineModel model;
     private TestingView testView;
+    private MaintenanceView maintenanceView;
+    private ItemsView itemsView;
 
-    public MainController(MainView view, VendingMachineModel model, TestingView testView) {
-        this.mainView = view;
-        this.model = model;
-        this.testView = testView;
-    
+    public MainController() {
+        mainView = new MainView();
+        testView = new TestingView();
+        maintenanceView = new MaintenanceView(mainView);
+        model = new VendingMachineModel(mainView, testView, maintenanceView);
+
         // Add listeners to the view's buttons
         mainView.addRegularVendingMachineBtnListener(new RegularVendingMachineListener());
         mainView.addSpecialVendingMachineBtnListener(new SpecialVendingMachineListener());
         mainView.addTestVendingMachineBtnListener(new TestVendingMachineListener());
         mainView.addExitBtnListener(new ExitBtnListener());
-    
+
         // Add listeners to the testing view's buttons
         testView.addOrderBtnListener(new OrderBtnListener());
         testView.addMaintenanceBtnListener(new MaintenanceBtnListener());
         testView.addBackBtnListener(new BackBtnListener());
+
+        // Add listeners to the maintenance view's buttons
+        maintenanceView.getItemManagementButton().addActionListener(new ItemManagementBtnListener());
+        maintenanceView.getCurrencyStorageButton().addActionListener(new CurrencyStorageBtnListener());
+        maintenanceView.getTransactionsButton().addActionListener(new TransactionsBtnListener());
+        maintenanceView.getBackButton().addActionListener(new BackBtn1Listener());
+
+        mainView.setVisible(true);
     }
 
     class RegularVendingMachineListener implements ActionListener {
@@ -29,7 +40,9 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             // Handle Regular Vending Machine button click
             // Call the model to process the action
-            model.createRegularVendingMachine();
+            VendingMachine vendingMachine = model.createRegularVendingMachine();
+            itemsView = new ItemsView(vendingMachine);
+            model.setItemsView(itemsView);
         }
     }
 
@@ -38,7 +51,9 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             // Handle Special Vending Machine button click
             // Call the model to process the action
-            model.createSpecialVendingMachine();
+            VendingMachine vendingMachine = model.createSpecialVendingMachine();
+            itemsView = new ItemsView(vendingMachine);
+            model.setItemsView(itemsView);
         }
     }
 
@@ -74,8 +89,39 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             // Implement the logic for Maintenance button
             model.maintainVendingMachine();
-            MaintenanceView maintenanceView = model.getMaintenanceView();
-            maintenanceView.setVisible(true);
+
+        }
+    }
+
+    class ItemManagementBtnListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Item Management clicked.");
+            model.manageItems();
+        }
+    }
+
+    class CurrencyStorageBtnListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Call the model to process the action
+            model.manageCurrencyStorage();
+        }
+    }
+
+    class TransactionsBtnListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Call the model to process the action
+            model.viewTransactions();
+        }
+    }
+
+    class BackBtn1Listener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Call the model to process the action
+            model.goBack();
         }
     }
 
