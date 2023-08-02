@@ -8,17 +8,14 @@ import java.util.Map;
 public class OrderView extends JFrame implements ChangeListener {
     private VendingMachine vendingMachine;
     private JTable itemsTable;
-    private JTextField orderTextField;
-    private CustomerService customerService; // Use the interface instead of the concrete Customer class
+    private JTextField orderTextField; // Text field for user input
+    private Customer customer; // Reference to the customer
 
-    public OrderView(VendingMachine vendingMachine) {
+    public OrderView(VendingMachine vendingMachine, Customer customer) {
         this.vendingMachine = vendingMachine;
-        vendingMachine.addChangeListener(this);
+        this.customer = customer;
+        vendingMachine.addChangeListener(this); // Register this view as a change listener
         initUI();
-    }
-
-    public void setCustomerService(CustomerService customerService) {
-        this.customerService = customerService;
     }
 
     
@@ -42,16 +39,23 @@ public class OrderView extends JFrame implements ChangeListener {
         orderPanel.add(addToCartButton);
 
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(new BackBtnListener());
+        backButton.addActionListener(new BackBtnListener(customer));
+        
+        JButton goToCartButton = new JButton("Go To Cart");
+        goToCartButton.addActionListener(new GoToCartBtnListener());
 
-        JPanel buttonPanel = new JPanel();
+        JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(backButton);
+        buttonPanel.add(goToCartButton);
+
+
 
         updateTableData();
 
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(scrollPane, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
 
 
         getContentPane().add(orderPanel, BorderLayout.NORTH);
@@ -110,9 +114,28 @@ public class OrderView extends JFrame implements ChangeListener {
         updateTableData();
     }
 
-    class BackBtnListener implements ActionListener {
+    class GoToCartBtnListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            // Create and display the CartView passing the customer instance
+            CartView cartView = new CartView(customer, vendingMachine);
+            cartView.setVisible(true);
+        }
+    }
+
+    class BackBtnListener implements ActionListener {
+        private Customer customer;
+    
+        public BackBtnListener(Customer customer) {
+            this.customer = customer;
+        }
+    
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Empty out the customer's cart
+            customer.clearCart();
+    
+            // Hide or close the current view
             setVisible(false);
         }
     }

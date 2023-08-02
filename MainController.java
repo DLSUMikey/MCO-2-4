@@ -10,12 +10,14 @@ public class MainController {
     private ItemsView itemsView;
     private CurrencyView currView;
     private OrderView ordView;
+    private Customer customer;
 
     public MainController() {
         mainView = new MainView();
         testView = new TestingView();
         maintenanceView = new MaintenanceView(mainView);
         model = new VendingMachineModel(mainView, testView, maintenanceView, currView, ordView );
+        customer = new Customer("User");
 
         // Add listeners to the view's buttons
         mainView.addRegularVendingMachineBtnListener(new RegularVendingMachineListener());
@@ -45,7 +47,7 @@ public class MainController {
             VendingMachine vendingMachine = model.createRegularVendingMachine();
             ItemsView itemsView = new ItemsView(vendingMachine);
             CurrencyView currView = new CurrencyView(vendingMachine);
-            OrderView ordView = new OrderView(vendingMachine);
+            OrderView ordView = new OrderView(vendingMachine, customer);
             model.setItemsView(itemsView);
             model.setCurrView(currView);
             model.setOrdView(ordView);
@@ -60,7 +62,7 @@ public class MainController {
             VendingMachine vendingMachine = model.createSpecialVendingMachine();
             ItemsView itemsView = new ItemsView(vendingMachine);
             CurrencyView currView = new CurrencyView(vendingMachine);
-            OrderView ordView = new OrderView(vendingMachine);
+            OrderView ordView = new OrderView(vendingMachine, customer);
             model.setItemsView(itemsView);
             model.setCurrView(currView);
             model.setOrdView(ordView);
@@ -91,7 +93,7 @@ public class MainController {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Implement the logic for Order button
-            model.orderVendingMachine();
+            model.orderVendingMachine(ordView);
         }
     }
 

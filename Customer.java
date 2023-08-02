@@ -11,6 +11,10 @@ public class Customer {
         this.cart = new HashMap<>();
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Map<String, Integer> getCart() {
         return cart;
     }

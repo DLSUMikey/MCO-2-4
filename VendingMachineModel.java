@@ -47,15 +47,14 @@ public class VendingMachineModel {
         return specialVendingMachine;
     }
 
-    public void testVendingMachine(OrderView orderView) {
+    public void testVendingMachine() {
         testingView.setVisible(true);
         mainView.setVisible(false);
         customer = new Customer("User");
-        orderView.setCustomer(customer);  // Create a new Customer instance
     }
     
 
-    public void orderVendingMachine() {
+    public void orderVendingMachine(OrderView orderView) {
         ordView.setVisible(true);
         System.out.println("Ordering...");
     }
@@ -72,6 +71,7 @@ public class VendingMachineModel {
 
     public void manageCurrencyStorage() {
         currView.setVisible(true);
+        currView.refresh();
         System.out.println("Managing currency storage...");
     }
 

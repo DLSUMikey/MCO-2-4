@@ -6,6 +6,7 @@ public class Currency {
     private int fiveHundreds;
     private int hundreds;
     private int fifties;
+    private int twenties;
     private int tens;
     private int fives;
     private int ones;
@@ -15,12 +16,13 @@ public class Currency {
     private int nickel;
     private int penny;
 
-    public Currency(int thousands, int fiveHundreds, int hundreds, int fifties, int tens, int fives, int ones,
+    public Currency(int thousands, int fiveHundreds, int hundreds, int fifties, int twenties, int tens, int fives, int ones,
                     int halfPeso, int quarter, int dime, int nickel, int penny) {
         this.thousands = thousands;
         this.fiveHundreds = fiveHundreds;
         this.hundreds = hundreds;
         this.fifties = fifties;
+        this.twenties = twenties;
         this.tens = tens;
         this.fives = fives;
         this.ones = ones;
@@ -31,12 +33,28 @@ public class Currency {
         this.penny = penny;
     }
 
+    public double getTotalCurrencyValue() {
+        return thousands * 1000.0 +
+            fiveHundreds * 500.0 +
+            hundreds * 100.0 +
+            fifties * 50.0 +
+            tens * 10.0 +
+            fives * 5.0 +
+            ones * 1.0 +
+            halfPeso * 0.5 +
+            quarter * 0.25 +
+            dime * 0.1 +
+            nickel * 0.05 +
+            penny * 0.01;
+    }
+
     public Map<String, Integer> getDenominations() {
         Map<String, Integer> denominations = new LinkedHashMap<>(); // Keep insertion order for display purposes
         denominations.put("Thousands", getThousands());
         denominations.put("Five Hundreds", getFiveHundreds());
         denominations.put("Hundreds", getHundreds());
         denominations.put("Fifties", getFifties());
+        denominations.put("Twenties", getTwenties());
         denominations.put("Tens", getTens());
         denominations.put("Fives", getFives());
         denominations.put("Ones", getOnes());
@@ -46,6 +64,24 @@ public class Currency {
         denominations.put("Nickel", getNickel());
         denominations.put("Penny", getPenny());
         return denominations;
+    }
+
+    public String[] getAllDenominations() {
+        return new String[] {
+            "Thousands",
+            "FiveHundreds",
+            "Hundreds",
+            "Fifties",
+            "Twenties",
+            "Tens",
+            "Fives",
+            "Ones",
+            "HalfPeso",
+            "Quarter",
+            "Dime",
+            "Nickel",
+            "Penny"
+        };
     }
 
     // Getters
@@ -63,6 +99,10 @@ public class Currency {
 
     public int getFifties() {
         return fifties;
+    }
+
+    public int getTwenties() {
+        return twenties;
     }
 
     public int getTens() {
@@ -112,6 +152,10 @@ public class Currency {
 
     public void setFifties(int fifties) {
         this.fifties = fifties;
+    }
+
+    public void setTwenties(int twenties) {
+        this.twenties = twenties;
     }
 
     public void setTens(int tens) {

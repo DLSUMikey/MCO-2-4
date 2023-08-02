@@ -12,6 +12,7 @@ public abstract class VendingMachine {
     private Map<String, ItemWithStock> itemsWithStock = new LinkedHashMap<>(); // Use a map to store items with placeholder names and stock
     protected Currency currency;
     private final List<ChangeListener> changeListeners = new ArrayList<>();
+    private List<Transaction> transactions;
 
     public void addChangeListener(ChangeListener changeListener) {
         changeListeners.add(changeListener);
@@ -24,7 +25,7 @@ public abstract class VendingMachine {
     }
 
     public VendingMachine(String name, int maxSlots, int maxStocks) {
-        this(name, maxSlots, maxStocks, new Currency(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+        this(name, maxSlots, maxStocks, new Currency(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
         createDefaultItems(); // Call a method to create default placeholder items
     }
 
@@ -34,6 +35,7 @@ public abstract class VendingMachine {
         this.maxStocks = maxStocks;
         this.currency = currency;
         this.itemsWithStock = new HashMap<>();
+        this.transactions = new ArrayList<>();
     }
 
         // Getters
@@ -58,17 +60,147 @@ public abstract class VendingMachine {
     public void refillCurrency(String denomination, int quantityToRefill) {
         switch (denomination) {
             case "Thousands":
-                currency.setThousands(currency.getThousands() + quantityToRefill);
+                currency.setThousands(currency.getThousands()+ quantityToRefill);
                 break;
-            case "Five Hundreds":
+            case"FiveHundreds":
                 currency.setFiveHundreds(currency.getFiveHundreds() + quantityToRefill);
                 break;
             case "Hundreds":
                 currency.setHundreds(currency.getHundreds() + quantityToRefill);
                 break;
-            // Add cases for other denominations
+            case "Fifties":
+                currency.setFifties(currency.getFifties() + quantityToRefill);
+                break;
+            case "Twenties":
+                currency.setTwenties(currency.getTwenties() + quantityToRefill);
+                break;
+            case "Tens":
+                currency.setTens(currency.getTens() + quantityToRefill);
+                break;
+            case "Fives":
+                currency.setFives(currency.getFives() + quantityToRefill);
+                break;
+            case "Ones":
+                currency.setOnes(currency.getOnes() + quantityToRefill);
+                break;
+            case "HalfPeso":
+                currency.setHalfPeso(currency.getHalfPeso() + quantityToRefill);
+                break;
+            case "Quarter":
+                currency.setQuarter(currency.getQuarter() + quantityToRefill);
+                break;
+            case "Dime":
+                currency.setDime(currency.getDime() + quantityToRefill);
+                break;
+            case "Nickel":
+                currency.setNickel(currency.getNickel() + quantityToRefill);
+                break;
+            case "Penny":
+                currency.setPenny(currency.getPenny() + quantityToRefill);
+                break;
             default:
                 System.out.println("Invalid denomination: " + denomination);
+        }
+    }
+
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+    }
+    
+    public void removeCurrency(String denomination, int quantityToRemove) throws Exception{
+        switch (denomination) {
+            case "Thousands":
+                if (currency.getThousands() >= quantityToRemove) {
+                    currency.setThousands(currency.getThousands() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Thousands in stock");
+                }
+                break;
+            case"FiveHundreds":
+                if (currency.getFiveHundreds() >= quantityToRemove) {
+                    currency.setFiveHundreds(currency.getFiveHundreds() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Thousands in stock");
+                }
+            case "Hundreds":
+                if (currency.getHundreds() >= quantityToRemove) {
+                    currency.setHundreds(currency.getHundreds() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Hundreds in stock");
+                }
+                break;
+            case "Fifties":
+                if (currency.getFifties() >= quantityToRemove) {
+                    currency.setFifties(currency.getFifties() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Fifties in stock");
+                }
+                break;
+            case "Twenties":
+                if (currency.getTwenties() >= quantityToRemove) {
+                    currency.setTwenties(currency.getTwenties() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Twenties in stock");
+                }
+                break;
+            case "Tens":
+                if (currency.getTens() >= quantityToRemove) {
+                    currency.setTens(currency.getTens() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Tens in stock");
+                }
+                break;
+            case "Fives":
+                if (currency.getFives() >= quantityToRemove) {
+                    currency.setFives(currency.getFives() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Fives in stock");
+                }
+                break;
+            case "Ones":
+                if (currency.getOnes() >= quantityToRemove) {
+                    currency.setOnes(currency.getOnes() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Ones in stock");
+                }
+                break;
+            case "HalfPeso":
+                if (currency.getHalfPeso() >= quantityToRemove) {
+                    currency.setHalfPeso(currency.getHalfPeso() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Dimes in stock");
+                }
+                break;
+            case "Quarter":
+                if (currency.getQuarter() >= quantityToRemove) {
+                    currency.setQuarter(currency.getQuarter() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Quarters in stock");
+                }
+                break;
+            case "Dime":
+                if (currency.getDime() >= quantityToRemove) {
+                    currency.setDime(currency.getDime() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Dimes in stock");
+                }
+                break;
+            case "Nickel":
+                if (currency.getNickel() >= quantityToRemove) {
+                    currency.setNickel(currency.getNickel() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Nickels in stock");
+                }
+                break;
+            case "Penny":
+                if (currency.getPenny() >= quantityToRemove) {
+                    currency.setPenny(currency.getPenny() - quantityToRemove);
+                } else {
+                    System.out.println("Not enough Pennies in stock");
+                }
+                break;
+            default:
+                throw new Exception("Invalid denomination: " + denomination);
         }
     }
 

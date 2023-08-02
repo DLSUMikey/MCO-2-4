@@ -14,11 +14,15 @@ public class CurrencyView extends JFrame {
         this.vendingMachine = vendingMachine;
         initUI();
     }
+    
+    public void refresh() {
+        updateTableData();
+    }
 
     private void initUI() {
         setTitle("Currency View - " + vendingMachine.getName());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(600, 400));
+        setPreferredSize(new Dimension(800, 600));  // Increased size of the frame
 
         String[] columnNames = {"Denomination", "Quantity"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
