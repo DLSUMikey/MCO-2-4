@@ -66,6 +66,7 @@ public class ProductView extends JDialog {
 
             List<String> messages = new ArrayList<>();
             messages.add("Slicing Bread...");
+            messages.add("Preparing Meat...");
             for (Map.Entry<JCheckBox, Item> entry : checkBoxes.entrySet()) {
                 JCheckBox checkBox = entry.getKey();
                 Item topping = entry.getValue();

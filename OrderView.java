@@ -80,21 +80,22 @@ public class OrderView extends JFrame implements ChangeListener {
         public void actionPerformed(ActionEvent e) {
             String itemName = orderTextField.getText();
             ItemWithStock itemWithStock = vendingMachine.getItemsWithStock().get(itemName);
-
+        
             if (itemWithStock != null && itemWithStock.getItem().isSaleable()) {
                 int stock = itemWithStock.getStock();
                 int orderedQuantity = customer.getCart().getOrDefault(itemName, 0) + 1;
-
+        
                 if (orderedQuantity <= stock) {
                     customer.addItemToCart(itemName);
-                    System.out.println("Item added to cart: " + itemName);
+                    JOptionPane.showMessageDialog(OrderView.this, "Item added to cart: " + itemName);
                 } else {
-                    System.out.println("Ordered quantity exceeds available stock for: " + itemName);
+                    JOptionPane.showMessageDialog(OrderView.this, "Ordered quantity exceeds available stock for: " + itemName);
                 }
             } else {
-                System.out.println("Item not found or not saleable: " + itemName);
+                JOptionPane.showMessageDialog(OrderView.this, "Item not found or not saleable: " + itemName);
             }
         }
+        
     }
 
     /**
@@ -143,15 +144,16 @@ public class OrderView extends JFrame implements ChangeListener {
                         ProductView productView = new ProductView(availableToppings, customer, selectedBread, selectedMeat);
                         productView.setVisible(true);
                     } else {
-                        System.out.println("No toppings available for sandwich making.");
+                        JOptionPane.showMessageDialog(OrderView.this, "No toppings available for sandwich making.");
                     }
                 }
             }
-
+        
             TransactionHistoryView transactionHistoryView = new TransactionHistoryView(vendingMachine);
             CartView cartView = new CartView(customer, vendingMachine, transactionHistoryView);
             cartView.setVisible(true);
         }
+        
     }
 
     /**

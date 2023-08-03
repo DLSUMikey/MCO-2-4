@@ -146,25 +146,25 @@ private void updateTableData() {
             case "White Bread":
                 return new Item("White Bread", 150, 20.50, true);
             case "Cheese":
-                return new Item("Cheese", 100, 20.00, true);
-            case "BaconStrips":
+                return new Item("Cheese", 100, 20.00, false);
+            case "Bacon Strips":
                 return new Item("BaconStrips", 90, 50.00, true);
             case "HamStrips":
                 return new Item("HamStrips", 90, 40.50, true);
             case "Lettuce":
-                return new Item("Lettuce", 10, 40.00, true);
+                return new Item("Lettuce", 10, 40.00, false);
             case "Pickles":
-                return new Item("Pickles", 10, 15.50, true);
+                return new Item("Pickles", 10, 15.50, false);
             case "Mustard":
                 return new Item("Mustard", 5, 5.00, false);
             case "Ketchup":
                 return new Item("Ketchup", 20, 20.00, false);
             case "Onion":
                 return new Item("Onion", 10, 10.00, false);
-            case "TurkeyStrips":
-                return new Item("TurkeyStrips", 30, 40.00, false);
+            case "Turkey Strips":
+                return new Item("TurkeyStrips", 30, 40.00, true);
             case "Sausage":
-                return new Item("Sausage", 90, 30.00, false);
+                return new Item("Sausage", 90, 30.00, true);
             case "Cucumber":
                 return new Item("Cucumber", 15, 20.00, false);
             case "Mayonnaise":
